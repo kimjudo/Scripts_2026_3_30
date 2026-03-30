@@ -6,10 +6,11 @@ public class PillItem : Item
     public float sanityHeal = 15f;
     public float addictionGain = 10f;
 
-    public override bool Use(GameObject user)
+    public override bool Use(PlayerContext player)
     {
-        var sanity = user.GetComponent<Sanity>();
-        var addiction = user.GetComponent<Addiction>();
+        var sanity = player.Sanity;
+        var addiction = player.Addiction;
+        
         if (sanity == null || addiction == null) return false;
 
         sanity.HealSanity(sanityHeal);

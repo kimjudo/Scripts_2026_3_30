@@ -28,7 +28,7 @@ public abstract class Item : ScriptableObject
     public string itemName;
 
 
-    public virtual bool Use(GameObject user)
+    public virtual bool Use(PlayerContext player)
     {
         return false;
     }

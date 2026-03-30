@@ -5,9 +5,10 @@ public class WaterItem : Item
 {
     public float ThirstHeal = 15f;
 
-    public override bool Use(GameObject user)
+    public override bool Use(PlayerContext player)
     {
-        var thirst = user.GetComponent<Thirst>();
+        var thirst = player.Thirst;
+        
         if (thirst == null) return false;
 
         thirst.Drink(ThirstHeal);

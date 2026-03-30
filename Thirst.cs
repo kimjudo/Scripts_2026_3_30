@@ -22,11 +22,8 @@ public class Thirst : MonoBehaviour
     {
         tickTimer += Time.deltaTime;
         if (tickTimer < tickInterval) return;
-        if(tickTimer > tickInterval)
-        {
-            Current = Mathf.Clamp(Current - drainAmount, 0f, max);
-            tickTimer = 0f;
-        }
+        Current = Mathf.Clamp(Current - drainAmount, 0f, max);
+        tickTimer = 0f;
         onThirstChanged?.Invoke(Current, max);
     }
 

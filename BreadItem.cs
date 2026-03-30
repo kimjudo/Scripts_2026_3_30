@@ -5,9 +5,10 @@ public class BreadItem : Item
 {
     public float HungerHeal = 15f;
 
-    public override bool Use(GameObject user)
+    public override bool Use(PlayerContext player)
     {
-        var hunger = user.GetComponent<Hunger>();
+        var hunger = player.Hunger;
+        
         if (hunger == null) return false;
 
         hunger.Eat(HungerHeal);
