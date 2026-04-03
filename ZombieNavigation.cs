@@ -119,4 +119,11 @@ public class ZombieNavigation : MonoBehaviour
 
     public bool IsReady() => //식 본문 멤버 문법 사용 원래는 메서드같은 느낌
         agent != null && agent.enabled && agent.isOnNavMesh;
+
+    //───patrolPoints 할당───────────────────────────────────────
+    public void SetPatrolPoints(Transform[] points)
+    {
+        patrolPoints = points;
+        PatrolIndex = 0;
+    }
 }

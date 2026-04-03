@@ -3,8 +3,6 @@ using UnityEngine.InputSystem;
 
 public class InteractionManager : MonoBehaviour
 {
-    public static InteractionManager Instance { get; private set; }
-
     [Header("Ray 설정")]
     [SerializeField] private float maxDistance = 3f;
     [SerializeField] private Camera cam;
@@ -13,38 +11,20 @@ public class InteractionManager : MonoBehaviour
     [Header("참조")]
     [SerializeField] private InventoryManager inventoryManager;
     [SerializeField] private HandAnimator handAnimator;
-    [SerializeField] private MapBoard map;
 
     private bool isReaching;
     private float blockReachingUntil;
 
     private WorldItem currentItem;
-    private WorldItem lastItem;
-
     private MapBoard currentMap;
-    private MapBoard lastMap;
-
     private TeleportDoor currentDoor;
-    private TeleportDoor lastDoor;
+    private ContainerInteractable currentContainer;
     private HomeReturnInteractable homeReturnInteractable;
-    private HomeReturnInteractable lastHomeReturnInteractable;
 
-    private bool isWatchingMap;
-    private bool iswatchingDoor;
     private bool reachedSent;
-
-    static readonly int IsReaching = Animator.StringToHash("isReaching");
-    static readonly int Reached = Animator.StringToHash("Reached");
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-
         if (cam == null) cam = Camera.main;
         if (cam == null)
         {
@@ -60,7 +40,7 @@ public class InteractionManager : MonoBehaviour
             return;
         }
 
-        isReaching = handAnimator.animator.GetBool(IsReaching);
+        isReaching = handAnimator.animator.GetBool(HandAnimeParams.isReaching);
     }
 
     private void Update()
@@ -71,10 +51,9 @@ public class InteractionManager : MonoBehaviour
     {
         if (Time.time < blockReachingUntil)
         {
-            currentItem = null; currentMap = null; currentDoor = null; homeReturnInteractable = null;
+            currentItem = null; currentMap = null; currentDoor = null; homeReturnInteractable = null; currentContainer = null;
             SetReaching(false);
 
-            lastItem = null; lastMap = null; lastDoor = null; lastHomeReturnInteractable = null;
             reachedSent = false;
             return;
         }
@@ -83,7 +62,7 @@ public class InteractionManager : MonoBehaviour
         currentMap = null;
         currentDoor = null;
         homeReturnInteractable = null;
-
+        currentContainer = null;
 
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
@@ -102,6 +81,9 @@ public class InteractionManager : MonoBehaviour
                     
                     if (currentDoor == null)
                         homeReturnInteractable = hit.transform.GetComponentInParent<HomeReturnInteractable>();
+                        
+                        if (homeReturnInteractable == null)
+                            currentContainer = hit.transform.GetComponentInParent<ContainerInteractable>();
             }
         }
 
@@ -109,8 +91,8 @@ public class InteractionManager : MonoBehaviour
 
         if (isLookingItem && !reachedSent)
         {
-            handAnimator.animator.ResetTrigger(Reached);
-            handAnimator.animator.SetTrigger(Reached);
+            handAnimator.animator.ResetTrigger(HandAnimeParams.Reached);
+            handAnimator.animator.SetTrigger(HandAnimeParams.Reached);
             reachedSent = true;
         }
 
@@ -119,10 +101,6 @@ public class InteractionManager : MonoBehaviour
 
         SetReaching(isLookingItem);
 
-        lastItem = currentItem;
-        lastMap = currentMap;
-        lastDoor = currentDoor;
-        lastHomeReturnInteractable = homeReturnInteractable;
     }
     public void OnInteract(InputAction.CallbackContext ctx)
     {
@@ -142,6 +120,11 @@ public class InteractionManager : MonoBehaviour
         if (homeReturnInteractable != null)
         {
             homeReturnInteractable.Interact();
+            return;
+        }
+        if(currentContainer != null)
+        {
+            currentContainer.InteractWithContainer();
             return;
         }
 
@@ -170,7 +153,6 @@ public class InteractionManager : MonoBehaviour
             SetReaching(false);
 
             currentItem = null;
-            lastItem = null;
 
             Destroy(go);
             blockReachingUntil = Time.time + 0.1f;
@@ -184,7 +166,7 @@ public class InteractionManager : MonoBehaviour
     private void SetReaching(bool value)
     {
         if (isReaching == value) return;
-        handAnimator.animator.SetBool(IsReaching, value);
+        handAnimator.animator.SetBool(HandAnimeParams.isReaching, value);
         isReaching = value;
     }
 }

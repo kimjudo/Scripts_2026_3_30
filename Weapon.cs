@@ -8,7 +8,6 @@ public class Weapon : MonoBehaviour
     private GunItem itemData;
     private WeaponState weaponState;
 
-
     private InventoryManager invenManager;
     private HandAnimator handAnimator;
 
@@ -125,17 +124,20 @@ public class Weapon : MonoBehaviour
         if (currentFiringMode == FiringMode.Single)
             firePressed = false;
     }
-    void PlayEmptySoundAndCooldown()
+    void PlayEmptySoundAndCooldown()// 원래여기서 다이렉트로 재생했는데 근데 캡슐화를 위해서 SoundManager에 재생 함수넣고 실행하는걸로 바꿨어요
     {
-        if (SoundManager.Instance?.emptyMagazineChannel != null && ReadyToFire)
+        if (!ReadyToFire) return;
+        if (SoundManager.Instance == null) return;
+
+        bool played = SoundManager.Instance.PlayEmptyMagazineSound();
+        if (!played) return;
+
+        ReadyToFire = false;
+
+        if (allowReset)
         {
-            SoundManager.Instance.emptyMagazineChannel.Play();
-            ReadyToFire = false;
-            if (allowReset)
-            {
-                Invoke(nameof(ResetShot), fireDelay);
-                allowReset = false;
-            }
+            Invoke(nameof(ResetShot), fireDelay);
+            allowReset = false;
         }
     }
     public void FireWeapon()
@@ -152,8 +154,8 @@ public class Weapon : MonoBehaviour
 
         if (animator != null)
         {
-            animator.SetTrigger("Attack");
-            handAnimator?.animator?.SetTrigger("Attack");
+            animator.SetTrigger(GunAnimeParams.Attack);
+            handAnimator?.animator?.SetTrigger(HandAnimeParams.Attack);
         }
 
         if (SoundManager.Instance != null)
@@ -181,7 +183,7 @@ public class Weapon : MonoBehaviour
         }
         if (currentAmmo <= 0)
         {
-            animator.SetTrigger("Empty");
+            animator.SetTrigger(GunAnimeParams.Empty);
         }
         NoiseSystem.Emit(transform.position, itemData.soundRange, NoiseSystem.NoiseType.Gunshot, itemData.soundLoudness);
     }
@@ -189,7 +191,6 @@ public class Weapon : MonoBehaviour
     public void OnFire(InputAction.CallbackContext ctx)
     {
         if (IsReloading) return; // 리로드 중 발사 차단
-        if (MainInventoryButton.InventoryOpen) return;// 인벤토리 열려있을땐 발사 차단
 
         if (ctx.canceled)
         {
@@ -214,13 +215,13 @@ public class Weapon : MonoBehaviour
 
         if (currentAmmo == 0)
         {
-            animator?.SetTrigger("Reload_Empty");
-            handAnimator?.animator?.SetTrigger("Reload_Empty");
+            animator?.SetTrigger(GunAnimeParams.Reload_Empty);
+            handAnimator?.animator?.SetTrigger(HandAnimeParams.Reload_Empty);
         }
         else
         {
-            animator?.SetTrigger("Reload_Left");
-            handAnimator?.animator?.SetTrigger("Reload_Left");
+            animator?.SetTrigger(GunAnimeParams.Reload_Left);
+            handAnimator?.animator?.SetTrigger(HandAnimeParams.Reload_Left);
         }
 
         IsReloading = true;
@@ -346,7 +347,7 @@ public class Weapon : MonoBehaviour
         // state에도 반영
         if (weaponState != null)
             weaponState.fireModeIndex = fireModeIndex;
-        handAnimator?.animator?.SetTrigger("Toggle");
+        handAnimator?.animator?.SetTrigger(HandAnimeParams.Toggle);
     }
 
     private void FireHitscan(Vector3 dir)
@@ -406,7 +407,7 @@ public class Weapon : MonoBehaviour
     void SetEmptyState()
     {
         bool empty = _currentAmmo <= 0;
-        animator?.SetBool("isEmpty", empty);
+        animator?.SetBool(GunAnimeParams.IsEmpty, empty);
     }
 }
 

@@ -6,6 +6,8 @@ public class PlayerInputHandler : MonoBehaviour
 {
     [SerializeField] private HandManager handManager;
     [SerializeField] private ShoveAbility shoveAbility;
+    [SerializeField] private InteractionManager interactionManager;
+    [SerializeField] private InventoryUIController mainInventoryButton;
     //Weapon Input Handlers
     public void ChangeFiringMode(InputAction.CallbackContext ctx)
     {
@@ -62,7 +64,7 @@ public class PlayerInputHandler : MonoBehaviour
     public void OnInteract(InputAction.CallbackContext ctx)
     {
         if (!ctx.performed) return;
-        InteractionManager.Instance.OnInteract(ctx);
+        interactionManager.OnInteract(ctx);
     }
     //InteractionManager Input Handlers end
 
@@ -70,8 +72,7 @@ public class PlayerInputHandler : MonoBehaviour
     public void ShowOrHide(InputAction.CallbackContext ctx)
     {
         if (!ctx.performed) return;
-        Debug.Log($"[ShowOrHide] MainInventoryButton.Instance = {MainInventoryButton.Instance}");
-        MainInventoryButton.Instance.Toggle();
+        mainInventoryButton.Toggle();
     }
     //MainInventoryButton Input Handlers end
 

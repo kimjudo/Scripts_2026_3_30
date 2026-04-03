@@ -48,15 +48,22 @@ public class MapUIController : MonoBehaviour
             Open();
         }
     }
-    public void Open(){
+    public void Open()
+    {
         Rebind();
+        if (panel == null) return;
+
         panel.SetActive(true);
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
         if (playerInput) playerInput.SwitchCurrentActionMap("UI");
     }
-    public void Close(){
+
+    public void Close()
+    {
         Rebind();
+        if (panel == null) return;
+
         panel.SetActive(false);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;

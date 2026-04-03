@@ -17,5 +17,11 @@ public class PlayerContext : MonoBehaviour
         Sanity = GetComponent<Sanity>();
         Addiction = GetComponent<Addiction>();
         Stamina = GetComponent<Stamina>();
+
+        PlayerRegistry.Register(this);
+    }
+    public void OnDestroy()
+    {
+        PlayerRegistry.Unregister(this);
     }
 }

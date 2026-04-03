@@ -56,7 +56,7 @@ public class InventoryManager : MonoBehaviour
 
         if (itemInSlot == null || itemInSlot.item == null) return;
 
-        animator.SetTrigger("Use");
+        animator.SetTrigger(HandAnimeParams.Use);
 
         bool used = itemInSlot.item.Use(playerContext); // 루트로 가서 헝거를 찾는데 지금 dontdestroyonload가 root로 되어있어서 그래서 못쓴거임 ;그래서 playerContext를 만들어서 그걸 넘겨주는 방식으로 바꿈
         Debug.Log("UseSelectedItem called with context: " + ctx);

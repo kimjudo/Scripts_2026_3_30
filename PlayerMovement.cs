@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
         float inputAmount = Mathf.Clamp01(moveInput.magnitude);
         isMoving = inputAmount > 0.01f;
 
-        //shoundRun 기준으로 달리기 판단
+        //shouldRun 기준으로 달리기 판단
         bool shouldRun = isRunning && isMoving && isGrounded;
 
         if (shouldRun)
@@ -93,7 +93,7 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
 
         // 애니메이션 파라미터
-        handAnimator.animator.SetBool("isMoving", isMoving);
+        handAnimator.animator.SetBool(HandAnimeParams.isMoving, isMoving);
 
         //블렌드 트리 계산
         float targetMoveAmount = 0f;
@@ -103,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
         moveAmount = Mathf.SmoothDamp(moveAmount, targetMoveAmount, ref moveAmountVel, accelTime);
 
         //애니 파라미터
-        handAnimator.animator.SetFloat("Speed", moveAmount);
+        handAnimator.animator.SetFloat(HandAnimeParams.Speed, moveAmount);
 
         // (원래 쓰던 lastPosition은 유지해둠. 필요 없으면 지워도 됨)
         lastPosition = transform.position;

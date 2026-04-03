@@ -22,6 +22,7 @@ public class ZombieAI : MonoBehaviour
     public ZombieAttack attack;
     public Knockback knockback;
     public Animator animator;
+    PlayerContext playerContext;
 
     [Header("Chase — Give Up")]
     public float giveUpDistance = 60f;
@@ -58,10 +59,19 @@ public class ZombieAI : MonoBehaviour
         SetState(State.Patrol);
     }
 
-    void Start()
+    public void Initialize(PlayerContext context)
     {
-        player = GameObject.FindWithTag("Player")?.transform;
-        sanity = player?.GetComponent<Sanity>();
+        playerContext = context;
+
+        if (playerContext == null)
+        {
+            player = null;
+            sanity = null;
+            return;
+        }
+
+        player = playerContext.transform;
+        sanity = playerContext.Sanity;
     }
 
     void Update()
@@ -91,7 +101,7 @@ public class ZombieAI : MonoBehaviour
             State.Chase                  => 1f,
             _                            => 0f
         };
-        animator.SetFloat("Velocity", speed01, 0.12f, Time.deltaTime);
+        animator.SetFloat(ZombieAnimeParams.Velocity, speed01);
 
         switch (state)
         {
@@ -213,8 +223,8 @@ public class ZombieAI : MonoBehaviour
         // Knockback 애니는 SetState 안에서만 트리거 (이중 호출 방지)
         if (state == State.Knockback)
         {
-            animator.ResetTrigger("Knockback");
-            animator.SetTrigger("Knockback");
+            animator.ResetTrigger(ZombieAnimeParams.Knockback);
+            animator.SetTrigger(ZombieAnimeParams.Knockback);
         }
 
         if (debugLogs)

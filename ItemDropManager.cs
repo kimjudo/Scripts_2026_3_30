@@ -2,25 +2,16 @@ using UnityEngine;
 
 public class ItemDropManager : MonoBehaviour
 {
-    public static ItemDropManager Instance { get; private set; }
-
-    public Transform dropPoint;          // 플레이어/카메라 앞 빈 오브젝트
-    public GameObject worldItemPrefab;   // 기본 월드 아이템 프리팹
+    public Transform dropPoint; // 플레이어/카메라 앞 빈 오브젝트
+    public GameObject worldItemPrefab; // 기본 월드 아이템 프리팹
 
     private void Awake()
     {
-        // 이미 다른 인스턴스가 있으면 파괴
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
         if (dropPoint == null)
         {
             Debug.LogError("ItemDropManager: dropPoint가 null임", this);
             return;
         }
-        Instance = this;
     }
 
     public GameObject SpawnWorldItem(Item item, int count)

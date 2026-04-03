@@ -5,12 +5,12 @@ public class SoundManager : MonoBehaviour
     public static SoundManager Instance { get; private set; }
 
     [Header("총기 사운드")]
-    public AudioSource shootingChannel;
-    public AudioSource explosionChannel;
-    public AudioSource reloadingChannel;
-    public AudioSource emptyMagazineChannel;
+    [SerializeField] private AudioSource shootingChannel;
+    [SerializeField] private AudioSource explosionChannel;
+    [SerializeField] private AudioSource reloadingChannel;
+    [SerializeField] private AudioSource emptyMagazineChannel;
 
-    void Awake()
+    private void Awake()
     {
         if (Instance != null && Instance != this)
         {
@@ -41,5 +41,13 @@ public class SoundManager : MonoBehaviour
         if (item == null || item.explosionSound == null) return;
         if (!explosionChannel) return;
         explosionChannel.PlayOneShot(item.explosionSound);
+    }
+
+    public bool PlayEmptyMagazineSound() // 원래 SoundManager.Instance.emptyMagazineChannel.Play(); 로 weapon에서 불러썻는데 근데 캡슐화를 위해 바꿈
+    {
+        if (!emptyMagazineChannel) return false;
+
+        emptyMagazineChannel.Play();
+        return true;
     }
 }

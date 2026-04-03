@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class MapRouteLineUI : MonoBehaviour
 {
-    [SerializeField] private MapTravelController travel;
+    [SerializeField] private MapSelectionController mapSelectionController;
     [SerializeField] private RectTransform root;
     [SerializeField] private RectTransform lineRect;
     [SerializeField] private RectTransform startPoint;
@@ -19,13 +19,13 @@ public class MapRouteLineUI : MonoBehaviour
     }
     void OnEnable()
     {
-        Debug.Log($"MapRouteLineUI OnEnable / travel = {travel}");
-        if (travel) travel.OnSelectionChanged += HandleSelectionChanged;
+        Debug.Log($"MapRouteLineUI OnEnable / mapSelectionController = {mapSelectionController}");
+        if (mapSelectionController) mapSelectionController.OnSelectionChanged += HandleSelectionChanged;
     }
 
     void OnDisable()
     {
-        if (travel) travel.OnSelectionChanged -= HandleSelectionChanged;
+        if (mapSelectionController) mapSelectionController.OnSelectionChanged -= HandleSelectionChanged;
     }
     void HandleSelectionChanged(bool selected, RectTransform buttonRect, DestinationDatabase data)
     {

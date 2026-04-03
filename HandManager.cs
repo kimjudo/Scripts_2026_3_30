@@ -40,7 +40,7 @@ public class HandManager : MonoBehaviour
         // 빈손
         if (invenItem == null || invenItem.item == null)
         {
-            handAnimator.animator.SetInteger("ItemState", 0);
+            handAnimator.animator.SetInteger(HandAnimeParams.ItemState, 0);
             currentInventoryItem = null;
             return;
         }
@@ -48,7 +48,7 @@ public class HandManager : MonoBehaviour
         if (invenItem.item.handPrefab == null)
         {
             Debug.LogWarning("No hand prefab for item: " + invenItem.item.itemName);
-            handAnimator.animator.SetInteger("ItemState", 0);
+            handAnimator.animator.SetInteger(HandAnimeParams.ItemState, 0);
             currentInventoryItem = invenItem;
             return;
         }
@@ -81,7 +81,7 @@ public class HandManager : MonoBehaviour
                 }
 
                 currentWeapon.Init(gun, currentInventoryItem.weaponState, playerCamera);
-                handAnimator.animator.SetInteger("ItemState", gun.animatorID);
+                handAnimator.animator.SetInteger(HandAnimeParams.ItemState, gun.animatorID);
             }
         }
         if (invenItem.item is ThrowableItem grenadeItem)
@@ -91,19 +91,19 @@ public class HandManager : MonoBehaviour
             if (currentGrenade != null)
                 currentGrenade.InitGrenade(playerCamera, throwPoint, grenadeItem);
 
-            handAnimator.animator.SetInteger("ItemState", grenadeItem.animatorID);
+            handAnimator.animator.SetInteger(HandAnimeParams.ItemState, grenadeItem.animatorID);
         }
         if(invenItem.item is PillItem pillItem)
         {
-            handAnimator.animator.SetInteger("ItemState", pillItem.animatorID);
+            handAnimator.animator.SetInteger(HandAnimeParams.ItemState, pillItem.animatorID);
         }
         if(invenItem.item is WaterItem waterItem)
         {
-            handAnimator.animator.SetInteger("ItemState", waterItem.animatorID);
+            handAnimator.animator.SetInteger(HandAnimeParams.ItemState, waterItem.animatorID);
         }
         if(invenItem.item is BreadItem breadItem)
         {
-            handAnimator.animator.SetInteger("ItemState", breadItem.animatorID);
+            handAnimator.animator.SetInteger(HandAnimeParams.ItemState, breadItem.animatorID);
         }
     }
     public void Unequip()
@@ -122,8 +122,8 @@ public class HandManager : MonoBehaviour
             currentModel = null;
         }
 
-        handAnimator.animator.SetInteger("ItemState", 0);
-        handAnimator.animator.SetTrigger("Unequip");
+        handAnimator.animator.SetInteger(HandAnimeParams.ItemState, 0);
+        handAnimator.animator.SetTrigger(HandAnimeParams.Unequip);
 
         currentInventoryItem = null;
     }

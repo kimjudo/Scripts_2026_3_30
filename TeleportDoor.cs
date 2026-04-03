@@ -7,6 +7,6 @@ public class TeleportDoor : MonoBehaviour
     public void InteractWithDoor()
     {
         if(mapTravelCon == null)return;
-        mapTravelCon.MoveScene();
+        mapTravelCon.MoveSelectedScene();
     }
 }

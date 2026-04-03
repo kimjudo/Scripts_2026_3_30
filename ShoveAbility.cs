@@ -18,7 +18,7 @@ public class ShoveAbility : MonoBehaviour
 
         nextUsableTime = Time.time + cooldown;
 
-        handAnimator.animator.SetTrigger("Shove");
+        handAnimator.animator.SetTrigger(HandAnimeParams.Shove);
     }
 
 

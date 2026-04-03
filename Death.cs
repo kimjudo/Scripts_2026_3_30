@@ -37,6 +37,6 @@ public class Death : MonoBehaviour
                 agent.enabled = false;
             }
         }
-        animator.SetTrigger("Dead");
+        animator.SetTrigger(HandAnimeParams.Dead);
     }
 }

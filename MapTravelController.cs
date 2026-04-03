@@ -1,65 +1,26 @@
-using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MapTravelController : MonoBehaviour
 {
-    public static MapTravelController Instance { get; private set; }
+    [SerializeField] private MapSelectionController selectionController;
 
-    public DestinationState State = new DestinationState();
-
-    public event Action<bool, RectTransform, DestinationDatabase> OnSelectionChanged;
-
-    private DestinationDatabase selectedData;
-
-    private void Awake()
+    public void MoveSelectedScene()
     {
-        if (Instance != null && Instance != this)
+        if (selectionController == null) return;
+
+        var selected = selectionController.SelectedData;
+        if (selected == null) return;
+
+        if (SceneTravelService.Instance == null)
         {
-            Destroy(gameObject);
+            Debug.LogWarning("SceneTravelService.Instance가 없습니다.");
             return;
         }
 
-        Instance = this;
+        SceneTravelService.Instance.TryMoveScene(
+            selected.targetSceneName,
+            selected.targetSpawnId
+        );
+        Debug.Log("Moving to scene: " + selected.targetSceneName + " with spawn: " + selected.targetSpawnId);
     }
-
-    public void SelectOrDeselect(DestinationDatabase data, RectTransform buttonRect)
-    {
-        if (State.currentId == data.Id)
-        {
-            State.currentId = null;
-            selectedData = null;
-            OnSelectionChanged?.Invoke(false, buttonRect, data);
-            return;
-        }
-
-        State.currentId = data.Id;
-        selectedData = data;
-
-        OnSelectionChanged?.Invoke(true, buttonRect, data);
-    }
-
-    public bool TryMoveScene(string sceneName, string spawnId)
-    {
-        if (string.IsNullOrEmpty(sceneName)) return false;
-        if (string.IsNullOrEmpty(spawnId)) return false;
-
-        SceneTravelData.targetSpawnId = spawnId;
-        SceneTravelData.hasPendingSpawn = true;
-
-        SceneManager.LoadScene(sceneName);
-        return true;
-    }
-
-    public void MoveScene()
-    {
-        if (selectedData == null) return;
-
-        TryMoveScene(selectedData.targetSceneName, selectedData.targetSpawnId);
-    }
-
-    public void BackToHome()
-    {
-        TryMoveScene("Stage0_Motel", "0");
-    }
-}
+} 

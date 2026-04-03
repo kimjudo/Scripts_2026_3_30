@@ -71,8 +71,8 @@ public class ZombieAttack : MonoBehaviour
         nextAttackTime = Time.time + attackCooldown;
         attackStartTime = Time.time;
 
-        animator.ResetTrigger("Attack");
-        animator.SetTrigger("Attack");
+        animator.ResetTrigger(ZombieAnimeParams.Attack);
+        animator.SetTrigger(ZombieAnimeParams.Attack);
         return true;
     }
 
