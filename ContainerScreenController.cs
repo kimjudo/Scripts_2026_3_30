@@ -12,14 +12,14 @@ public class ContainerScreenController : MonoBehaviour
     private void Awake()
     {
         Rebind();
-        CloseAll();
     }
 
     private void Rebind()
     {
         if (playerInput == null)
         {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            GameObject player = GameObject.FindGameObjectWithTag(Tags.Player);
+
             if (player != null)
                 playerInput = player.GetComponent<PlayerInput>();
         }

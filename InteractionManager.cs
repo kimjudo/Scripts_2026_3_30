@@ -73,17 +73,19 @@ public class InteractionManager : MonoBehaviour
         if (hitSomething)
         {
             currentItem = hit.transform.GetComponentInParent<WorldItem>();
+            
             if (currentItem == null)
             {
                 currentMap = hit.transform.GetComponentInParent<MapBoard>();
+
                 if (currentMap == null)
                     currentDoor = hit.transform.GetComponentInParent<TeleportDoor>();
-                    
-                    if (currentDoor == null)
-                        homeReturnInteractable = hit.transform.GetComponentInParent<HomeReturnInteractable>();
-                        
-                        if (homeReturnInteractable == null)
-                            currentContainer = hit.transform.GetComponentInParent<ContainerInteractable>();
+
+                if (currentMap == null && currentDoor == null)
+                    homeReturnInteractable = hit.transform.GetComponentInParent<HomeReturnInteractable>();
+
+                if (currentMap == null && currentDoor == null && homeReturnInteractable == null)
+                    currentContainer = hit.transform.GetComponentInParent<ContainerInteractable>();
             }
         }
 

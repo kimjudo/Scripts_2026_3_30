@@ -36,8 +36,8 @@ public class ContainerInteractable : MonoBehaviour
             Debug.LogWarning("ContainerInteractable: containerScreen이 null이라 인터랙트 불가");
             return;
         }
-
-        Debug.Log("ContainerInteractable 인터랙트 성공");
         containerScreen.ToggleFor();
+        Debug.Log("ContainerInteractable 인터랙트 성공");
+
     }
 }

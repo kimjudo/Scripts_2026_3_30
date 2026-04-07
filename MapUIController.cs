@@ -51,9 +51,12 @@ public class MapUIController : MonoBehaviour
     public void Open()
     {
         Rebind();
+        Debug.Log($"Open() 호출 - panel: {panel}, panel null여부: {panel == null}");
         if (panel == null) return;
 
         panel.SetActive(true);
+        Debug.Log($"SetActive(true) 완료 - panel.activeSelf: {panel.activeSelf}");
+
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
         if (playerInput) playerInput.SwitchCurrentActionMap("UI");

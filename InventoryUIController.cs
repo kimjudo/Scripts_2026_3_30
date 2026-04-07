@@ -1,8 +1,10 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InventoryUIController : MonoBehaviour
 {
     [SerializeField] private GameObject mainInventory;
+    [SerializeField] private PlayerInput playerInput;
 
     public bool IsOpen => mainInventory != null && mainInventory.activeSelf;
 
@@ -13,8 +15,19 @@ public class InventoryUIController : MonoBehaviour
 
     public void Toggle()
     {
-        if (IsOpen) Close();
-        else Open();
+        if (IsOpen) {
+            Close();
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            playerInput.SwitchCurrentActionMap("Player");
+        }
+        else
+        {
+            Open();
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Confined;
+            playerInput.SwitchCurrentActionMap("UI");
+        }
     }
 
     public void Open()
