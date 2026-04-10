@@ -3,6 +3,7 @@ using UnityEngine;
 public class ContainerInteractable : MonoBehaviour
 {
     [SerializeField] private ContainerScreenController containerScreen;
+    [SerializeField] private ContainerInventory containerInventory;
 
     private void Awake()
     {
@@ -25,19 +26,30 @@ public class ContainerInteractable : MonoBehaviour
                 Debug.LogWarning("ContainerInteractable: ContainerScreenController를 찾지 못했습니다.");
             }
         }
+
+        if (containerInventory == null)
+        {
+            containerInventory = GetComponent<ContainerInventory>();
+        }
     }
 
-    public void InteractWithContainer()
+    public void InteractWithContainer() //시작
     {
         Rebind();
 
         if (containerScreen == null)
         {
-            Debug.LogWarning("ContainerInteractable: containerScreen이 null이라 인터랙트 불가");
+            Debug.LogWarning("ContainerInteractable: containerScreen이 null");
             return;
         }
-        containerScreen.ToggleFor();
-        Debug.Log("ContainerInteractable 인터랙트 성공");
 
+        if (containerInventory == null)
+        {
+            Debug.LogWarning("ContainerInteractable: containerInventory가 null");
+            return;
+        }
+
+        containerScreen.ToggleFor(containerInventory);
+        Debug.Log("ContainerInteractable 인터랙트 성공");
     }
 }

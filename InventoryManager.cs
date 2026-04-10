@@ -264,11 +264,11 @@ public class InventoryManager : MonoBehaviour
     }
 
 
-    public void SpawnItem(Item item, InventorySlot slot, WeaponState state = null)
+    public void SpawnItem(Item item, InventorySlot slot, WeaponState state = null, int count = 1)
     {
         GameObject newItem = Instantiate(inventoryItemPrefab, slot.transform);
         InventoryItem inventoryItem = newItem.GetComponent<InventoryItem>();
-        inventoryItem.InitialiseItem(item, 1, state);
+        inventoryItem.InitialiseItem(item, count, state);
     }
 
 

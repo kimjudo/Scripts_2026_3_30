@@ -22,6 +22,8 @@ public abstract class Item : ScriptableObject
     [Header("Only UI")]
     public bool isStackable = true;
     public int maxStackCount;
+    [SerializeField] private string itemId;
+    public string ItemId => itemId;
 
     [Header("Both")]
     public Sprite image;
